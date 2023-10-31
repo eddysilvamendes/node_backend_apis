@@ -3,7 +3,10 @@ const dotenv = require('dotenv')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const app = express()
-const port = 3000
+const port = 6002
+const authRouter = require('./routes/auth')
+const userRouter = require('./routes/user')
+
 
 dotenv.config()
 
@@ -22,5 +25,6 @@ mongoose.connect(process.env.MONGO_URL).then(()=>console.log('DB connected')).ca
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.use('/',authRouter)
+app.use('/api/users',userRouter)
 app.listen(process.env.PORT || port, () => console.log(`Foodly Backend API app listening on port ${process.env.PORT}!`))
