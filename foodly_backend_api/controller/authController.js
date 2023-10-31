@@ -26,16 +26,15 @@ module.exports = {
                         emailVerified:false,
                         disabled:false,
                     })
-                    console.log(userResponse.uid);
                     const newUser = new User({
                         username:user.username,
                         email: user.email,
-                        password: CryptoJS.AES.encrypt(user.password,process.env.SECRET).toString,
+                        password: CryptoJS.AES.encrypt(user.password,process.env.SECRET).toString(),
                         uid: userResponse.uid,
                         userType: 'Client'
                     })
                     await newUser.save()
-                    response.status(200).json({
+                    response.status(201).json({
                         status:true,
                     })
                 } catch (error) {
@@ -48,5 +47,29 @@ module.exports = {
         }
     },
      //Function async to login user
-    loginUser: async (request,response)=>{}
+    loginUser: async (request,response)=>{
+        try {
+            const user = await User.findOne({email:request.body.email},{__v:0,createdAt:0,updatedAt:0})
+            !user && response.status(401).json('Wrong Credentials')
+
+            const decryptedpassword = CryptoJS.AES.decrypt(user.password, process.env.SECRET);
+            const decrypted = decryptedpassword.toString(CryptoJS.enc.Utf8);
+
+            decrypted !== request.body.password && response.status(401).json('Wrong Password')
+            const userToken = jwt.sign({
+                id: user._id,userType:user.userType,email:user.email
+            }, process.env.JWT_SEC, {expiresIn:'21d'});
+
+            const {password,email,...others} = user._doc
+            response.status(200).json({...others,userToken})
+            
+        } catch (error) {
+            response.status(500).json({
+                status:false,
+                error:error.message,
+            })
+        }
+    }
+    //
+
 }
