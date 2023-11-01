@@ -39,4 +39,15 @@ module.exports = {
             response.status(500).json({status:false,message:error.message})
         }
     },
+    getAllCategory: async (request,response)=>{
+        try {
+            const category = await Category.find({},{__v:0});
+            if(!category){
+                response.status(404).json({status:false,message:'No category not found!'})
+            }
+            response.status(200).json(category)
+        } catch (error) {
+            response.status(500).json({status:false,message:error.message})
+        }
+    }
 }
