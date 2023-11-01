@@ -5,14 +5,14 @@ module.exports ={
     addRestaurant: async(request,response)=>{
         const newRestaurant = new Restaurant(request.body)
         try {
-            await newRestaurant.save()
-            response.status(201).json({status:true,message:'Restaurant successfully created'})
+           const restaurant =  await newRestaurant.save()
+            response.status(201).json({status:true,message:'Restaurant successfully created',id:restaurant.id})
         } catch (error) {
             response.status(500).json({status:false,message:error.message})
         }
     },
     serviceAvailible: async (request,response)=>{
-        const restaurant_id = request.params;
+        const restaurant_id = request.params.id;
 
         try {
             const restaurant = await Restaurant.findById(restaurant_id)

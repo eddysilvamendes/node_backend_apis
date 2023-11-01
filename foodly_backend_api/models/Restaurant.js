@@ -21,8 +21,8 @@ const RestaurantSchema = new mongoose.Schema({
         id:{type: String, required:true},
         latitude:{type: Number, required:true},
         longitude:{type: Number, required:true},
-        latitudeDelta:{type: Number, required:true},
-        longitudeDelta:{type: Number, required:true},
+        latitudeDelta:{type: Number, required:true,default:0.0122},
+        longitudeDelta:{type: Number, required:true,default:0.0221},
         address:{type: String, required:true},
         title:{type: String, required:true}
         }
