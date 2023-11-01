@@ -6,6 +6,7 @@ const app = express()
 const port = 6002
 const authRouter = require('./routes/auth')
 const userRouter = require('./routes/user')
+const restaurantRouter = require('./routes/restaurant')
 
 
 dotenv.config()
@@ -27,4 +28,5 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 app.use('/',authRouter)
 app.use('/api/users',userRouter)
+app.use('/api/restaurants',restaurantRouter)
 app.listen(process.env.PORT || port, () => console.log(`Foodly Backend API app listening on port ${process.env.PORT}!`))
