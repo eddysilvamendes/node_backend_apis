@@ -17,7 +17,7 @@ module.exports ={
         try {
             const restaurant = await Restaurant.findById(restaurant_id)
             if(!restaurant){
-                return response.status(403).json({status:false,message:'Restaurant not found'})
+                return response.status(404).json({status:false,message:'Restaurant not found'})
             }
             restaurant.isAvailable = !restaurant.isAvailable
             await restaurant.save()
@@ -31,10 +31,22 @@ module.exports ={
         try {
             const restaurant = await Restaurant.findById(restaurant_id)
             if(!restaurant){
-                return response.status(403).json({status:false,message:'Restaurant not found'})
+                return response.status(404).json({status:false,message:'Restaurant not found'})
             }
             await Restaurant.findByIdAndDelete(restaurant_id)
             response.status(200).json({status:true,message:'Restaurant successfully deleted'})
+        } catch (error) {
+            response.status(500).json({status:true,message:error.message})
+        }
+    },
+    getRestaurant:async(request,response)=>{
+        const restaurant_id = request.params;
+        try {
+            const restaurant = await Restaurant.findById(restaurant_id)
+            if(!restaurant){
+                return response.status(404).json({status:false,message:'Restaurant not found'})
+            }
+            response.status(200).json(restaurant)
         } catch (error) {
             response.status(500).json({status:true,message:error.message})
         }
