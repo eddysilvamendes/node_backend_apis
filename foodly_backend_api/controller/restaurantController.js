@@ -25,5 +25,18 @@ module.exports ={
         } catch (error) {
             response.status(500).json({status:true,message:error.message})
         }
+    },
+    deleteRestaurant: async(request,response)=>{
+        const restaurant_id = request.params;
+        try {
+            const restaurant = await Restaurant.findById(restaurant_id)
+            if(!restaurant){
+                return response.status(403).json({status:false,message:'Restaurant not found'})
+            }
+            await Restaurant.findByIdAndDelete(restaurant_id)
+            response.status(200).json({status:true,message:'Restaurant successfully deleted'})
+        } catch (error) {
+            response.status(500).json({status:true,message:error.message})
+        }
     }
 }
