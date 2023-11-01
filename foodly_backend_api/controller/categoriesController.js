@@ -65,5 +65,20 @@ module.exports = {
         } catch (error) {
             response.status(500).json({status:false,message:error.message})
         }
+    },
+    getRandomCategory: async(request,response)=>{
+        try {
+            let categories = await Category.aggregate([
+                {$match: {value: {$ne:'more'}}},
+                {$sample:{size:7}}
+            ]);
+            const moreCategory = await Category.findOne({value:'more'});
+            if (moreCategory){
+                categories.push(moreCategory);
+            }
+            response.status(200).json(categories)
+        } catch (error) {
+            response.status(500).json({status:false,message:error.message})
+        }
     }
 }
