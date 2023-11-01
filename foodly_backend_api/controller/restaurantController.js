@@ -10,5 +10,20 @@ module.exports ={
         } catch (error) {
             response.status(500).json({status:false,message:error.message})
         }
+    },
+    serviceAvailible: async (request,response)=>{
+        const restaurant_id = request.params;
+
+        try {
+            const restaurant = await Restaurant.findById(restaurant_id)
+            if(!restaurant){
+                return response.status(403).json({status:false,message:'Restaurant not found'})
+            }
+            restaurant.isAvailable = !restaurant.isAvailable
+            await restaurant.save()
+            response.status(200).json({status:true,message:'Availability Restaurant successfully toggled',isAvailable:restaurant.isAvailable})
+        } catch (error) {
+            response.status(500).json({status:true,message:error.message})
+        }
     }
 }
