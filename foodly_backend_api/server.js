@@ -28,5 +28,5 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 app.use('/',authRouter)
 app.use('/api/users',userRouter)
-app.use('/api/restaurants',restaurantRouter)
+app.use('/api/restaurant',restaurantRouter)
 app.listen(process.env.PORT || port, () => console.log(`Foodly Backend API app listening on port ${process.env.PORT}!`))
