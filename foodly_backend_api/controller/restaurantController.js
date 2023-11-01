@@ -27,7 +27,7 @@ module.exports ={
         }
     },
     deleteRestaurant: async(request,response)=>{
-        const restaurant_id = request.params;
+        const restaurant_id = request.params.id;
         try {
             const restaurant = await Restaurant.findById(restaurant_id)
             if(!restaurant){
@@ -40,7 +40,7 @@ module.exports ={
         }
     },
     getRestaurant: async(request,response)=>{
-        const restaurant_id = request.params;
+        const restaurant_id = request.params.id;
         try {
             const restaurant = await Restaurant.findById(restaurant_id)
             if(!restaurant){
