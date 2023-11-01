@@ -49,5 +49,21 @@ module.exports = {
         } catch (error) {
             response.status(500).json({status:false,message:error.message})
         }
+    },
+    patchCategoryImage: async(request,response)=>{
+        const id = request.params.id;
+        const imageUrl=request.body.image;
+        try {
+            const existingCategory = await Category.findById(id)
+            const updateCategory = new Category({
+                title:existingCategory.title,
+                value:existingCategory.value,
+                imageUrl:imageUrl
+            })
+            await updateCategory.save();
+            response.status(200).json({status:true,message:'Category image updated successfully',updateCategory:updateCategory})
+        } catch (error) {
+            response.status(500).json({status:false,message:error.message})
+        }
     }
 }
