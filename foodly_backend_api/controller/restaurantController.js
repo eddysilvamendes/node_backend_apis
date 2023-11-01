@@ -23,7 +23,7 @@ module.exports ={
             await restaurant.save()
             response.status(200).json({status:true,message:'Availability Restaurant successfully toggled',isAvailable:restaurant.isAvailable})
         } catch (error) {
-            response.status(500).json({status:true,message:error.message})
+            response.status(500).json({status:false,message:error.message})
         }
     },
     deleteRestaurant: async(request,response)=>{
@@ -36,10 +36,10 @@ module.exports ={
             await Restaurant.findByIdAndDelete(restaurant_id)
             response.status(200).json({status:true,message:'Restaurant successfully deleted'})
         } catch (error) {
-            response.status(500).json({status:true,message:error.message})
+            response.status(500).json({status:false,message:error.message})
         }
     },
-    getRestaurant:async(request,response)=>{
+    getRestaurant: async(request,response)=>{
         const restaurant_id = request.params;
         try {
             const restaurant = await Restaurant.findById(restaurant_id)
@@ -48,7 +48,30 @@ module.exports ={
             }
             response.status(200).json(restaurant)
         } catch (error) {
-            response.status(500).json({status:true,message:error.message})
+            response.status(500).json({status:false,message:error.message})
+        }
+    },
+    getRandomRestaurant: async(request,response)=>{
+        try {
+            let randomRestaurant = [];
+            if(request.params.code){
+                randomRestaurant = await Restaurant.aggregate([
+                    {$match: {code:request.params.code}},
+                    {$sample:{size:5}},
+                    {$project:{__v:0}},
+                ]);
+            }
+            if(!randomRestaurant){
+                randomRestaurant = await Restaurant.aggregate([
+                    {$sample:{size:5}},
+                    {$project:{__v:0}},
+                ]);
+            }
+            if (randomRestaurant.length){
+                response.status(200).json(randomRestaurant)
+            }
+        } catch (error) {
+            response.status(500).json({status:false,message:error.message})
         }
     }
 }
