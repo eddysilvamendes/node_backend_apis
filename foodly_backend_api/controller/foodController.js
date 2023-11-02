@@ -24,5 +24,20 @@ module.exports = {
         } catch (error) {
             response.status(500).json({status:false,message:error.message})
         }
+    },
+    getFoodByRestaurant: async (request,response) => {
+        const restaurantId = request.params.restaurantId;
+        try {
+            const foods = await Food.find({
+                restaurant:restaurantId
+            });
+            if(!foods || foods.length === 0){
+                return response.status(404).json({satus:false,message:'No food item found'})
+            }
+            response.status(200).json(foods)
+        } catch (error) {
+            response.status(500).json({satus:false,message:error.message})
+        }
     }
+
 }
