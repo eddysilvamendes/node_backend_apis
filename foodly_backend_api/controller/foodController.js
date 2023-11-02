@@ -12,5 +12,17 @@ module.exports = {
         } catch (error) {
             response.status(500).json({status:false,message:error.message})
         }
+    },
+    getFoodById: async (request,response)=>{
+        const foodId = request.params.id;
+        try {
+            const food = await Food.findById(foodId)
+            if(!food){
+                response.status(404).json({status:false,message:'Food not found!'})
+            }
+            response.status(200).json(food)
+        } catch (error) {
+            response.status(500).json({status:false,message:error.message})
+        }
     }
 }
