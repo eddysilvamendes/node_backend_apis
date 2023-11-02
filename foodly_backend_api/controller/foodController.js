@@ -38,6 +38,20 @@ module.exports = {
         } catch (error) {
             response.status(500).json({satus:false,message:error.message})
         }
+    },
+    deleteFoodById: async (request,response) => {
+        const food_id = request.params.id;
+
+        try {
+            const food = await Food.findById(food_id)
+            if (!food){
+                return response.status(404).json({satus:false,message:'No food item found'})
+            }
+            await Food.findByIdAndDelete(food_id)
+            response.status(200).json({satus:true,message:'Food deleted successfully!'})
+        } catch (error) {
+            response.status(500).json({satus:false,message:error.message})
+        }
     }
 
 }
