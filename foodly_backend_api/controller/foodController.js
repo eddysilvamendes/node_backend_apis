@@ -52,6 +52,21 @@ module.exports = {
         } catch (error) {
             response.status(500).json({satus:false,message:error.message})
         }
+    },
+    foodAvailability: async(request,response) => {
+        const food_id = request.params.id;
+
+        try {
+            const food = await Food.findById(food_id);
+            if(!food){
+                response.status(404).json({satus:false,message:'Food item not found'})
+            }
+            food.isAvailable = !food.isAvailable;
+            await food.save();
+            response.status(200).json({satus:true,message:'Food availability successfully toggled!'})
+        } catch (error) {
+            response.status(500).json({satus:false,message:error.message})
+        }
     }
 
 }
