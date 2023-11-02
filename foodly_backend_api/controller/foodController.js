@@ -67,6 +67,19 @@ module.exports = {
         } catch (error) {
             response.status(500).json({satus:false,message:error.message})
         }
+    },
+    updateFoodById: async(request,response) => {
+        const food_id = request.params.id;
+
+        try {
+            const food = await Food.findByIdAndUpdate(food_id,request.body,{new:true,runValidators:true});
+            if(!food){
+                response.status(404).json({satus:false,message:'Food item not updated'})
+            }
+            response.status(200).json({satus:true,message:'Food updated successfully!',food:food})
+        } catch (error) {
+            response.status(500).json({satus:false,message:error.message})
+        }
     }
 
 }
