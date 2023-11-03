@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const FoodSchema = new mongoose.Schema({
    title: {type: String, required:true},
    foodTags: {type: Array, required:true},
+   foodType:{type: String, required:true},
    category: {type: String, required:true},
    code: {type: String, required:true},
    isAvailable: {type: Boolean, required:true, default:true},
