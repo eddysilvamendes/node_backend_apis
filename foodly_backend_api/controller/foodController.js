@@ -101,7 +101,7 @@ module.exports = {
     },
     getRandomFoodByCode: async (request,response)=> {
         try {
-            const random_food_item = await Food.aggregate([
+            let random_food_item = await Food.aggregate([
                 {$match: {code:request.params.code}},
                 {$sample:{size:5}},
                 {$project:{_id:0}}
@@ -131,6 +131,25 @@ module.exports = {
         }
     },
     getRandomByCategoryAndCode: async (request,response)=> {
-
+        const {category,code} = request.params;
+        try {
+            let foods = await Food.aggregate([
+                {$match:{category:category,code:code}},
+                {$sample:{size:10}}
+            ]);
+            if(!foods || foods.length===0){
+                foods = await Food.aggregate([
+                    {$match:{code:code}},
+                    {$sample:{size:10}}
+                ]);
+            }else{
+                foods = await Food.aggregate([
+                    {$sample:{size:10}}
+                ]);
+            }
+            response.status(200).json(foods)
+        } catch (error) {
+            response.status(500).json({status:false,message:error.message})
+        }
     },
 }
