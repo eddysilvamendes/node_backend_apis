@@ -80,6 +80,32 @@ module.exports = {
         } catch (error) {
             response.status(500).json({satus:false,message:error.message})
         }
-    }
+    },
+    addFoodTag: async (request,response)=> {
+        const food_id = request.params.id;
+        const {tag} = request.body;
+        try {
+            const food = await Food.findById(food_id)
+            if(!food){
+                response.status(404).json({satus:false,message:'Food item not updated'})
+            }
+            if(food.foodTags.includes(tag)){
+                response.status(404).json({satus:false,message:'Tag already exist'})
+            }
+            food.foodTags.push(tag)
+            await food.save()
+            response.status(200).json({satus:true,message:'Food tag successfully updated'})
+        } catch (error) {
+            response.status(500).json({satus:false,message:error.message})
+        }
+    },
+    getRandomFoodByCode: async (request,response)=> {
 
+    },
+    addFoodType: async (request,response)=> {
+
+    },
+    getRandomByCategoryAndCode: async (request,response)=> {
+
+    },
 }
