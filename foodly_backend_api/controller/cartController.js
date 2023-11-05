@@ -85,5 +85,37 @@ module.exports = {
       response.status(500).json({ status: false, message: error.message });
     }
   },
-  decrimentProductQty: async (request, response) => {},
+  decrimentProductQty: async (request, response) => {
+    const user_id = request.user.id;
+    const product_id = request.body.product_id;
+    let count;
+    try {
+      const cart_item = Cart.find({ user_id: user_id, product_id: product_id });
+      if (!cart_item) {
+        response
+          .status(404)
+          .json({ status: false, message: "Cart item not found!" });
+      }
+      const product_price = cart_item.total_price / cart_item.quantity;
+      if (cart_item.quantity > 1) {
+        cart_item.quantity -= 1;
+        cart_item.total_price -= product_price;
+        await cart_item.save();
+        response
+          .status(200)
+          .json({ status: true, message: "Cart item quantity decremented" });
+      } else if (cart_item.quantity === 1) {
+        await Cart.findByIdAndDelete({
+          user_id: user_id,
+          product_id: product_id,
+        });
+        count = await Cart.countDocuments({ user_id });
+        response
+          .status(200)
+          .json({ status: true, message: "Cart item removed", count: count });
+      }
+    } catch (error) {
+      response.status(500).json({ status: false, message: error.message });
+    }
+  },
 };
