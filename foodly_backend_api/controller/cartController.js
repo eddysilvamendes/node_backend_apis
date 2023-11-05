@@ -47,7 +47,19 @@ module.exports = {
       response.status(500).json({ status: false, message: error.message });
     }
   },
-  fetchUserCart: async (request, response) => {},
+  fetchUserCart: async (request, response) => {
+    const user_id = request.user.id;
+
+    try {
+      const user_cart = await Cart.find({ user_id }).populate({
+        path: "product_id",
+        select: "title imageUrl restaurant, rating, ratingCount",
+      });
+      response.status(200).json({ status: true, cart: user_cart });
+    } catch (error) {
+      response.status(500).json({ status: false, message: error.message });
+    }
+  },
   clearUserCart: async (request, response) => {},
   getCartCount: async (request, response) => {},
   decrimentProductQty: async (request, response) => {},
