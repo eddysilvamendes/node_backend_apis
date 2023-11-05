@@ -26,10 +26,27 @@ module.exports = {
       }
       response.status(200).json({ status: true, count: count });
     } catch (error) {
-      response.status(200).json({ status: false, error: error.message });
+      response.status(200).json({ status: false, message: error.message });
     }
   },
-  removeProductFromCart: async (request, response) => {},
+  removeProductFromCart: async (request, response) => {
+    const item_id = request.params.id;
+    const user_id = request.params.id;
+    let count;
+    try {
+      const cart_item = await Cart.findById(item_id);
+      if (!cart_item) {
+        return response
+          .status(404)
+          .json({ status: false, message: "Cart item not found!" });
+      }
+      await Cart.findByIdAndDelete({ _id: item_id });
+      count = await Cart.countDocuments({ user_id });
+      response.status(200).json({ status: true, count: count });
+    } catch (error) {
+      response.status(500).json({ status: false, message: error.message });
+    }
+  },
   fetchUserCart: async (request, response) => {},
   clearUserCart: async (request, response) => {},
   getCartCount: async (request, response) => {},
