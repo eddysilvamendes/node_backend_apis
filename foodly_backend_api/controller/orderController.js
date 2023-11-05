@@ -101,12 +101,10 @@ module.exports = {
         { new: true }
       );
       if (updated_order) {
-        response
-          .status(200)
-          .json({
-            status: true,
-            message: "Order status successfully updated!",
-          });
+        response.status(200).json({
+          status: true,
+          message: "Order status successfully updated!",
+        });
       } else {
         response
           .status(404)
@@ -116,5 +114,27 @@ module.exports = {
       response.status(500).json({ status: false, message: error.message });
     }
   },
-  updatePaymentStatus: async (request, response) => {},
+  updatePaymentStatus: async (request, response) => {
+    const order_id = request.params.id;
+    const { payment_status } = request.body;
+    try {
+      const updated_order = await Order.findByIdAndUpdate(
+        order_id,
+        { payment_status },
+        { new: true }
+      );
+      if (updated_order) {
+        response.status(200).json({
+          status: true,
+          message: "Payment status successfully updated!",
+        });
+      } else {
+        response
+          .status(404)
+          .json({ status: false, message: "Failed to updated Payment Status" });
+      }
+    } catch (error) {
+      response.status(500).json({ status: false, message: error.message });
+    }
+  },
 };

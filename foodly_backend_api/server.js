@@ -11,6 +11,7 @@ const categoryRouter = require("./routes/category");
 const foodRouter = require("./routes/food");
 const cartRouter = require("./routes/cart");
 const addressRouter = require("./routes/address");
+const orderRouter = require("./routes/orders");
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use("/api/category", categoryRouter);
 app.use("/api/food", foodRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
+app.use("/api/order", orderRouter);
 app.listen(process.env.PORT || port, () =>
   console.log(`Foodly Backend API app listening on port ${process.env.PORT}!`)
 );
