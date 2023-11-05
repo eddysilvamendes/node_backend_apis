@@ -16,7 +16,7 @@ const DriverSchema = new mongoose.Schema(
       longitudeDelta: { type: Number, required: true, default: 0.0221 },
     },
     is_available: { type: Boolean, required: true },
-    rating: { type: Number, required: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
     total_delivery: { type: Number, default: 0 },
     profile_image: {
       type: String,

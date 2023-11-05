@@ -7,5 +7,7 @@ const {
 
 router.post("/", verifyAndAuthorization, driverController.registerDriver);
 router.patch("/", verifyDriver, driverController.setDriverAvailability);
+router.get("/", verifyAndAuthorization, driverController.getAllDriver);
+router.get("/:id", verifyDriver, driverController.getDriverDetail);
 
 module.exports = router;
