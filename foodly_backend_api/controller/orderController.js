@@ -43,7 +43,32 @@ module.exports = {
       response.status(500).json({ status: false, message: error.message });
     }
   },
-  getUserOrder: async (request, response) => {},
+  getUserOrder: async (request, response) => {
+    const user_id = request.user.id;
+
+    try {
+      const orders = await Order.find({
+        user_id,
+      })
+        .populate({
+          path: "restaurant_id",
+          select: "name location",
+        })
+        .populate({
+          path: "driver_id",
+          select: "name phone",
+        });
+      if (orders) {
+        response.status(200).json(orders);
+      } else {
+        response
+          .status(404)
+          .json({ status: false, message: "Order not found" });
+      }
+    } catch (error) {
+      response.status(500).json({ status: false, message: error.message });
+    }
+  },
   rateOrders: async (request, response) => {},
   updateOrderStatus: async (request, response) => {},
   updatePaymentStatus: async (request, response) => {},
