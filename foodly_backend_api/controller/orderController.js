@@ -91,6 +91,30 @@ module.exports = {
       response.status(500).json({ status: false, message: error.message });
     }
   },
-  updateOrderStatus: async (request, response) => {},
+  updateOrderStatus: async (request, response) => {
+    const order_id = request.params.id;
+    const { order_status } = request.body;
+    try {
+      const updated_order = await Order.findByIdAndUpdate(
+        order_id,
+        { order_status },
+        { new: true }
+      );
+      if (updated_order) {
+        response
+          .status(200)
+          .json({
+            status: true,
+            message: "Order status successfully updated!",
+          });
+      } else {
+        response
+          .status(404)
+          .json({ status: false, message: "Order not found!" });
+      }
+    } catch (error) {
+      response.status(500).json({ status: false, message: error.message });
+    }
+  },
   updatePaymentStatus: async (request, response) => {},
 };
