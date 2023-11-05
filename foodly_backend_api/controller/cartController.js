@@ -60,7 +60,21 @@ module.exports = {
       response.status(500).json({ status: false, message: error.message });
     }
   },
-  clearUserCart: async (request, response) => {},
+  clearUserCart: async (request, response) => {
+    const user_id = request.user.id;
+    let count;
+    try {
+      await Cart.deleteMany({ user_id });
+      count = await Cart.countDocuments({ user_id });
+      response.status(200).json({
+        status: true,
+        message: "Cart cleared successfully!",
+        count: count,
+      });
+    } catch (error) {
+      response.status(500).json({ status: false, message: error.message });
+    }
+  },
   getCartCount: async (request, response) => {},
   decrimentProductQty: async (request, response) => {},
 };
