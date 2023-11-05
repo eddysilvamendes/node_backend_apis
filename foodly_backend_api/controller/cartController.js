@@ -3,7 +3,7 @@ const Cart = require("../models/Cart");
 module.exports = {
   addProductToCart: async (request, response) => {
     const user_id = request.user.id;
-    const { product_id, total_price, quantity } = request.boddy;
+    const { product_id, total_price, quantity } = request.body;
     let count;
 
     try {
