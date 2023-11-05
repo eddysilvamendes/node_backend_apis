@@ -69,7 +69,28 @@ module.exports = {
       response.status(500).json({ status: false, message: error.message });
     }
   },
-  rateOrders: async (request, response) => {},
+  rateOrders: async (request, response) => {
+    const order_id = request.params.id;
+    const { rating, feedback } = request.body;
+    try {
+      const updated_order = await Order.findByIdAndUpdate(
+        order_id,
+        { rating, feedback },
+        { new: true }
+      );
+      if (updated_order) {
+        response
+          .status(200)
+          .json({ status: true, message: "Order rating successfully placed!" });
+      } else {
+        response
+          .status(404)
+          .json({ status: false, message: "Order not found!" });
+      }
+    } catch (error) {
+      response.status(500).json({ status: false, message: error.message });
+    }
+  },
   updateOrderStatus: async (request, response) => {},
   updatePaymentStatus: async (request, response) => {},
 };
