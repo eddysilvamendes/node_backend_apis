@@ -6,7 +6,7 @@ const AddressSchema = new mongoose.Schema(
     address_line_1: { type: String, required: true },
     city: { type: String, required: true },
     state: { type: String, required: true },
-    disctrict: { type: String, required: true },
+    district: { type: String, required: true },
     postal_code: { type: String, required: true },
     default: { type: Boolean, default: true },
     country: { type: String, required: true },

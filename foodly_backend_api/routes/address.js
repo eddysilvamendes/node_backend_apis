@@ -4,7 +4,7 @@ const { verifyAndAuthorization } = require("../middleware/verifyToken");
 
 router.post("/", verifyAndAuthorization, addressController.createAddress);
 router.post(
-  "/default/:id",
+  "/default",
   verifyAndAuthorization,
   addressController.setDetaultAddress
 );
